@@ -91,7 +91,7 @@ module Paperclip
         # Retain existing meta values that will not be recalculated when
         # reprocessing a subset of styles
         def merge_existing_meta_hash(meta)
-          return unless (original_meta = instance.send("#{name}_meta"))
+          return if !(original_meta = instance.send("#{name}_meta")) || original_meta.empty?
           meta.reverse_merge! meta_decode(original_meta)
         end
       end
