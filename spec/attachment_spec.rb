@@ -146,6 +146,18 @@ describe "Attachment" do
     end
   end
 
+  it "updates image which has empty string as meta" do
+    img = Image.create(small_image: nil, small_image_meta: '')
+    img.small_image = small_image
+    img.save!
+
+    geometry = geometry_for(small_path)
+    assert_equal geometry.width, img.small_image.width
+    assert_equal geometry.height, img.small_image.height
+    assert_equal "50x64", img.small_image.image_size
+    assert_equal (50.0 / 64.0), img.small_image.aspect_ratio
+  end
+
   private
 
   def small_path
