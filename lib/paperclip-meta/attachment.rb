@@ -47,6 +47,7 @@ module Paperclip
         # Return image dimesions ("WxH") for given style name. If style name not given,
         # return dimesions for default_style.
         def image_size(style = default_style)
+          return nil if instance_read(:meta).nil? || instance_read(:meta).empty?
           "#{width(style)}x#{height(style)}"
         end
 
@@ -95,13 +96,14 @@ module Paperclip
 
         # Return decoded metadata as Object
         def meta_decode(meta)
+          return {} if meta.empty?
           Marshal.load(Base64.decode64(meta))
         end
 
         # Retain existing meta values that will not be recalculated when
         # reprocessing a subset of styles
         def merge_existing_meta_hash(meta)
-          return if !(original_meta = instance.send("#{name}_meta")) || original_meta.empty?
+          return unless (original_meta = instance.send("#{name}_meta"))
           meta.reverse_merge! meta_decode(original_meta)
         end
       end

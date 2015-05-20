@@ -158,6 +158,14 @@ describe "Attachment" do
     assert_equal (50.0 / 64.0), img.small_image.aspect_ratio
   end
 
+  it "should not crash when meta attribute has been lost" do
+    img = Image.create(small_image: small_image, small_image_meta: '')
+
+    assert_equal nil, img.small_image.width
+    assert_equal nil, img.small_image.height
+    assert_equal nil, img.small_image.image_size
+  end
+
   private
 
   def small_path
